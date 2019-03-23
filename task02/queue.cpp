@@ -1,9 +1,7 @@
 
 #include "queue.h"
 #include <cstdlib>
-#include <iostream>
 
-using namespace std;
 
 List* ListQueue::new_l()
 {
