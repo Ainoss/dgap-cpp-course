@@ -2,11 +2,11 @@
 #pragma once
 
 typedef int data;
-struct List
+/*struct List
 {
 	List *next;
-	data *Data;
-};
+	data Data;
+};*/
 
 class BasicQueue
 {
@@ -28,12 +28,17 @@ class ListQueue: public BasicQueue
 public:
 	ListQueue();
 	~ListQueue();
-	void enqueue(data &d);
-	data dequeue();
-	unsigned getLength();
+	void enqueue(data &d) override;
+	data dequeue() override;
+	unsigned getLength() override;
 private:
+	struct List
+	{
+		List* next;
+		data Data;
+	};
 	List* list;
-	List* new_l();
+	List* tail;
 	void del_l(List* l);
 };
 
@@ -42,13 +47,13 @@ class ArrayQueue: public BasicQueue
 public:
 	ArrayQueue(unsigned max_size = 64);
 	~ArrayQueue();
-	void enqueue(data &d);
-	data dequeue();
-	unsigned getLength();
+	void enqueue(data &d) override;
+	data dequeue() override;
+	unsigned getLength() override;
 private:
 	unsigned first;
 	unsigned last;
-	unsigned max_len;
+	const unsigned max_len;
 	data* array;
 };
 

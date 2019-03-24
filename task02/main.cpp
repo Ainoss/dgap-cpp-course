@@ -48,6 +48,25 @@ int main()
 	}
 	
 	cout << "Length: " << queue->getLength() << endl;
+	
+	cout << "Number of members for enqueue: ";
+	cin >> size;
+	for (i = 0; i < size; i++)
+	{
+		cin >> a;
+		queue->enqueue(a);
+	}
+
+	cout << "Length: " << queue->getLength() << endl;
+
+	cout << "Number of members for dequeue: ";
+	cin >> size;
+	for (i = 0; i < size; i++)
+	{
+		cout << queue->dequeue() << endl;
+	}
+	
+	cout << "Length: " << queue->getLength() << endl;
 
 	delete queue;
 	return 0;

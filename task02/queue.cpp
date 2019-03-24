@@ -3,24 +3,22 @@
 #include <cstdlib>
 
 
-List* ListQueue::new_l()
-{
-       return new List;
-}
-
 void ListQueue::del_l(List *l)
 {
-	delete l->Data;
-	if (l->next != nullptr)
+	if (l != nullptr)
 	{
-		del_l(l->next);
-		delete l->next;
+		if (l->next != nullptr)
+		{
+			del_l(l->next);
+			delete l->next;
+		}
 	}
 }
 
 ListQueue::ListQueue()
 {
-	this->list = new_l();
+	tail = new List;
+	list = nullptr;
 }
 
 ListQueue::~ListQueue()
@@ -30,42 +28,50 @@ ListQueue::~ListQueue()
 
 void ListQueue::enqueue(data &d)
 {
-	if (list->Data == nullptr)
+	if (tail == nullptr)
 	{
-		list->Data = new data;
-		*(list->Data) = d;
+		tail = new List;
+		tail->Data = d;
+		list = tail;
+	}
+	else if (list == nullptr)
+	{
+		list = tail;
 	}
 	else
 	{
-		List* l = new_l();
-		l->Data = new data;
-		*(l->Data) = d;
-		l->next = list;
-		list = l;
+		tail->next = new List;
+		tail = tail->next;
 	}
+	tail->Data = d;
 }
 
 data ListQueue::dequeue()
 {
-	if (list->Data != nullptr)
+	if (list == nullptr)
+		exit(1);
+	data a = list->Data;
+	if (list != tail)
 	{
-		data a = *(list->Data);
 		List* l = list;
-		list = l->next;
-		delete l->Data;
+		list = list->next;
 		delete l;
-		return a;
 	}
 	else
-		exit(1);
+	{
+		delete list;
+		list = nullptr;
+	}
+	return a;
 }
 
 unsigned ListQueue::getLength()
 {
-	if (list->Data == nullptr) return 0;
+	if (list == nullptr)
+	       return 0;
 	List* l = list;
 	unsigned i = 1;
-	while (l->next != nullptr)
+	while (l != tail)
 	{
 		i++;
 		l = l->next;
@@ -74,7 +80,13 @@ unsigned ListQueue::getLength()
 }
 
 
-ArrayQueue::ArrayQueue(unsigned max_size): array(new data [max_size]), first(0), last(0), max_len(max_size) {}
+ArrayQueue::ArrayQueue(unsigned max_size):
+	array(new data [max_size]),
+	first(0),
+	last(0),
+	max_len(max_size)
+{
+}
 
 ArrayQueue::~ArrayQueue()
 {
@@ -83,14 +95,18 @@ ArrayQueue::~ArrayQueue()
 
 void ArrayQueue::enqueue(data &d)
 {
-	array[((first++) - 1) % max_len] = d;
-	if (first - last == max_len + 1) last ++;
+	if ((first % max_len == last % max_len) && (first != last))
+		exit(1);
+	array[first % max_len] = d;
+	first++;
 }
 
 data ArrayQueue::dequeue()
 {
-	if (last == first) exit (1);
-	return array[((last++)-1) % max_len];
+	if (last == first)
+		exit (1);
+	last++;
+	return array[(last - 1) % max_len];
 }
 
 unsigned ArrayQueue::getLength()
