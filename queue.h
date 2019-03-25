@@ -18,19 +18,25 @@ public:
 
 };
 
-template <typename T1>
-class node
-{
-public:
-	node(T1 x) : data(x), prev(nullptr) {};
 
-	T1 data;
-	node * prev;
-};
 
 template <typename T1>
 class ListQueue: public BasicQueue<T1>
 {
+private:
+	template <typename T1>
+	class node
+	{
+	public:
+		node(T1 x) : data(x), prev(nullptr) {};
+
+		T1 data;
+		node * prev;
+	};
+
+	node<T1> * head, *tail;
+	size_t size;
+
 public:
 	ListQueue() : head(nullptr), tail(nullptr), size(0) {};
 	ListQueue(node<T1> * x) : head(x), tail(x), size(1) {};
@@ -39,9 +45,7 @@ public:
 	virtual void enqueue(T1 & x);
 	virtual T1 dequeue();
 	virtual size_t getLength();
-private:
-	node<T1> * head, * tail;
-	size_t size;
+
     /*
      * Fully implement class:
      * - declarations here
