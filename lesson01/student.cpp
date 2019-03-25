@@ -9,7 +9,7 @@ using namespace std;
 const double Physicist::pi = 3.141593;
 int StudentFopf::faculty = 2;
 
-// Define Student methods
+// Define Student methodsa
 Student::Student(int age_)
 {
 	age = age_;
