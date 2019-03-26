@@ -1,4 +1,4 @@
-
+#include <iostream>
 #pragma once
 
 typedef int data;
@@ -22,25 +22,34 @@ class ListQueue: public BasicQueue
 {
 public:
     ListQueue();
+    void enqueue(data &);
+    data dequeue() ;
+    unsigned getLength();
 
-    /*
-     * Fully implement class:
-     * - declarations here
-     * - definitions in queue.cpp
-     * Could have infinite size
-     */
+private:
+    struct Node {
+    Node () {
+        m_next = NULL;
+    }
+    Node(const data& t ) {
+        m_t = t;
+        m_next = NULL;
+    }
+    data m_t;
+    Node* m_next;
+};
+    Node*m_head;
 };
 
 class ArrayQueue: public BasicQueue
 {
 public:
     ArrayQueue(unsigned max_size = 64);
-
-    /*
-     * Fully implement class:
-     * - declarations here
-     * - definitions in queue.cpp
-     * Only finite size implementation is required
-     */
+     void enqueue(data &);
+    data dequeue() ;
+    unsigned getLength();
+private:
+    data *ar;
+    int fr,re;
 };
 
