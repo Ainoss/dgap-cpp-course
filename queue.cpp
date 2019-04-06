@@ -5,11 +5,11 @@ using namespace std;
 ArrayQueue::ArrayQueue(int n)
 {
 	data * ar = new data[n];
-	this->dat = ar;
-	this->hade = 0;
-	this->tale = 1;
-	this->lar = n;
-	this->lon = 0;
+	dat = ar;
+	hade = 0;
+	tale = 1;
+	lar = n;
+	lon = 0;
 }
 void ArrayQueue::enqueue(data &c)
 {	
@@ -47,8 +47,11 @@ ListQueue::ListQueue()
 data ListQueue::denqueue()
 {
 	data x;
+	List *n;
+	n = this->first->nod;
 	x = this->first->val;
-	this->first = this->first->nod;
+	delete this->first;
+	this->first = n;
 	this->lon--;
 	return(x);
 }
