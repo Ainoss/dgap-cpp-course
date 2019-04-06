@@ -1,28 +1,27 @@
 #include <iostream>
 #include "queue.h"
 
-
 using namespace std;
 	ArrayQueue::ArrayQueue(int n)
 	{
-		data * ar = new data[n];
-		dat = ar;
-		hade = 0;
-		tale = 1;
-		lar = n;
-		lon = 0;
-    }
+		this->data * ar = new data[n];
+		this->dat = ar;
+		this->hade = 0;
+		this->tale = 1;
+		this->lar = n;
+		this->lon = 0;
+    	}
   	void ArrayQueue::enqueue(data &c)
 	{	
 		int k = this->tale;
-		dat[k] = c;
+		this->dat[k] = c;
 		this->tale = (this->tale + 1) % this->lar;
 		this->lon++;
 	}
 	data ArrayQueue::denqueue()
 	{
 		data x;
-		x = dat[(this->hade + 1)%lar] ;
+		x = dat[(this->hade + 1)%this->lar] ;
 		this->hade = (this->hade + 1) % this->lar;
 		this->lon--;
 		return(x);
