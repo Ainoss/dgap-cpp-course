@@ -22,7 +22,7 @@ using namespace std;
 		cin >> d;
 		(*queue).enqueue(d);
 	}
-	for (c = 0;c < 10;c++)
+    for (c = 0;c < 10;c++)
 	{
 		cout << (*queue).denqueue() << " " << (*queue).getLength << endl;
 	}
