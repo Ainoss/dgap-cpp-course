@@ -1,10 +1,5 @@
 
 typedef int data;
-typedef struct List
-{
-	data val;
-	List *nod;
-};
 class BasicQueue	
 {
 	public:
@@ -16,11 +11,11 @@ class ArrayQueue: public BasicQueue
 {
 	private:
 		int lar;
-	public:
 		int hade;
 		int tale;
 		data * dat;
 		int lon;
+	public:	
 	ArrayQueue(int n);
   	void  enqueue(data &c);
 	data  denqueue();	
@@ -28,10 +23,16 @@ class ArrayQueue: public BasicQueue
 };
 class ListQueue: public BasicQueue
 {
-	public:
+	private:
+	typedef struct List
+	{
+		data val;
+		List *nod;
+	};
 	List *first;
 	List *last;
 	int lon;
+	public:
 	void  enqueue(data &c);
 	ListQueue();
 	data denqueue();
