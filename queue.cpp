@@ -6,14 +6,11 @@ using namespace std;
 	ArrayQueue::ArrayQueue(int n)
 	{
 		data * ar = new data[n];
-		this->dat = ar;
-		
-	    
+		dat = ar;
 		hade = 0;
 		tale = 1;
-		this->lar = n;
+		lar = n;
 		lon = 0;
-
     }
   	void ArrayQueue::enqueue(data &c)
 	{	
@@ -21,13 +18,11 @@ using namespace std;
 		dat[k] = c;
 		this->tale = (this->tale + 1) % this->lar;
 		this->lon++;
-	
 	}
 	data ArrayQueue::denqueue()
 	{
-			data x;
-		x = dat[this->hade + 1] ;
-		
+		data x;
+		x = dat[(this->hade + 1)%lar] ;
 		this->hade = (this->hade + 1) % this->lar;
 		this->lon--;
 		return(x);
@@ -45,6 +40,7 @@ using namespace std;
 	}
 	ListQueue::ListQueue()
 	{	
+		
 		this->first = new List;
 		this->last = this->first;
 		this->lon = 0;
