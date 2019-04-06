@@ -3,12 +3,11 @@
 using namespace std;
 
  int main()
-{
+ {
     char c;
     std::cout << "Type of queue (a - array, l - list): ";
     std::cin >> c;
-
-     BasicQueue *queue = NULL;
+    BasicQueue *queue = NULL;
     if (c == 'a')
         queue = new ArrayQueue;
     else if (c == 'l')
@@ -18,7 +17,7 @@ using namespace std;
         return 1;
     }
 
-     for (c = 0;c < 10;c++)
+    for (c = 0;c < 10;c++)
 	{
 		cin >> d;
 		(*queue).enqueue(d);
@@ -27,9 +26,9 @@ using namespace std;
 	{
 		cout << (*queue).denqueue() << " " << (*queue).getLength << endl;
 	}
-     delete queue;
+    delete queue;
     return 0;
 }
 
 	
-}
+
