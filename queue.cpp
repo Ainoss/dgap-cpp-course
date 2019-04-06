@@ -4,7 +4,7 @@
 using namespace std;
 	ArrayQueue::ArrayQueue(int n)
 	{
-		this->data * ar = new data[n];
+		data * ar = new data[n];
 		this->dat = ar;
 		this->hade = 0;
 		this->tale = 1;
