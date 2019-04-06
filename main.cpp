@@ -7,12 +7,13 @@ using namespace std;
     char c;
     std::cout << "Type of queue (a - array, l - list): ";
     std::cin >> c;
-    BasicQueue *queue = NULL;
+	ArrayQueue queue(20);
     if (c == 'a')
-        queue = new ArrayQueue;
+	ArrayQueue queue(20);
     else if (c == 'l')
-        queue = new ListQueue;
-    else {
+        ListQueue queue;
+    else 
+    {
         std::cout << "Bad type, exit" << std::endl;
         return 1;
     }
@@ -20,13 +21,14 @@ using namespace std;
     for (c = 0;c < 10;c++)
 	{
 		cin >> d;
-		(*queue).enqueue(d);
+		queue.enqueue(d);
 	}
     for (c = 0;c < 10;c++)
 	{
-		cout << (*queue).denqueue() << " " << (*queue).getLength << endl;
+		cout << queue.denqueue() << " " 
+		cout << queue.getLength << endl;
 	}
-    delete queue;
+    delete &queue;
     return 0;
 }
 
