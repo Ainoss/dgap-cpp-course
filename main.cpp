@@ -19,17 +19,16 @@ using namespace std;
 
 	
     for (c = 0;c < 10;c++)
-	{
-		
-		cin >> d;
-		queue->enqueue(d);
-		cout << queue->getLength() << endl;
-	}
+    {	
+	cin >> d;
+	queue->enqueue(d);
+	cout << queue->getLength() << endl;
+    }
     for (c = 0;c < 10;c++)
-	{
-		cout << queue->denqueue()  << " ";
-		cout << queue->getLength() << endl;
-	}
+    {
+	cout << queue->denqueue()  << " ";
+	cout << queue->getLength() << endl;
+    }
     delete queue;
     return 0;
 }
