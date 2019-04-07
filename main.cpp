@@ -7,28 +7,30 @@ using namespace std;
     char c;
     std::cout << "Type of queue (a - array, l - list): ";
     std::cin >> c;
-	ArrayQueue queue(20);
+	BasicQueue *queue = NULL;
     if (c == 'a')
-	ArrayQueue queue(20);
+        queue = new ArrayQueue(20);
     else if (c == 'l')
-        ListQueue queue;
-    else 
-    {
+    	queue = new ListQueue;
+    else {
         std::cout << "Bad type, exit" << std::endl;
         return 1;
     }
 
+	
     for (c = 0;c < 10;c++)
-    {
-	cin >> d;
-	queue.enqueue(d);
-    }
+	{
+		
+		cin >> d;
+		queue->enqueue(d);
+		cout << queue->getLength() << endl;
+	}
     for (c = 0;c < 10;c++)
-    {
-	cout << queue.denqueue() << " " 
-	cout << queue.getLength << endl;
-    }
-    delete &queue;
+	{
+		cout << queue->denqueue()  << " ";
+		cout << queue->getLength() << endl;
+	}
+    delete queue;
     return 0;
 }
 
