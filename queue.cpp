@@ -13,17 +13,17 @@ ArrayQueue::ArrayQueue(int n)
 }
 void ArrayQueue::enqueue(data &c)
 {	
-	int k = this->tale;
-	this->dat[k] = c;
-	this->tale = (this->tale + 1) % this->lar;
-	this->lon++;
+	int k = tale;
+	dat[k] = c;
+	tale = (tale + 1) % lar;
+	lon++;
 }
 data ArrayQueue::denqueue()
 {
 	data x;
-	x = dat[(this->hade + 1)%this->lar] ;
-	this->hade = (this->hade + 1) % this->lar;
-	this->lon--;
+	x = dat[(hade + 1)%lar] ;
+	hade = (hade + 1) % lar;
+	lon--;
 	return(x);
 }	
 unsigned ArrayQueue::getLength()
@@ -32,32 +32,31 @@ unsigned ArrayQueue::getLength()
 }
 void ListQueue::enqueue(data &c)
 {	
-	this->last->nod = new List;
-	this->last->val = c;
-	this->last = this->last->nod;
-	this->lon++;
+	last->nod = new List;
+	last->val = c;
+	last = last->nod;
+	lon++;
 }
 ListQueue::ListQueue()
-{	
-		
-	this->first = new List;
-	this->last = this->first;
-	this->lon = 0;
+{		
+	first = new List;
+	last = first;
+	lon = 0;
 }
 data ListQueue::denqueue()
 {
 	data x;
 	List *n;
-	n = this->first->nod;
-	x = this->first->val;
-	delete this->first;
-	this->first = n;
-	this->lon--;
+	n = first->nod;
+	x = first->val;
+	delete first;
+	first = n;
+	lon--;
 	return(x);
 }
 unsigned ListQueue::getLength()
 {
-	return(this->lon);
+	return(lon);
 }
 	
 	
