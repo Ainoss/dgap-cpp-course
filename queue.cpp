@@ -28,7 +28,7 @@ data ArrayQueue::denqueue()
 }	
 unsigned ArrayQueue::getLength()
 {
-	return(this->lon);
+	return(lon);
 }
 void ListQueue::enqueue(data &c)
 {	
