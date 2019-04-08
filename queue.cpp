@@ -11,6 +11,10 @@ ArrayQueue::ArrayQueue(int n)
 	lar = n;
 	lon = 0;
 }
+ArrayQueue::~ArrayQueue()
+{
+	delete(dat);
+}
 void ArrayQueue::enqueue(data &c)
 {	
 	int k = tale;
@@ -42,6 +46,17 @@ ListQueue::ListQueue()
 	first = new List;
 	last = first;
 	lon = 0;
+}
+ListQueue::~ListQueue()
+{
+	while(lon != 0)
+	{
+		List *l = NULL;
+		l = first->nod;
+		delete(first);
+		first = l;
+		lon--;
+	}
 }
 data ListQueue::denqueue()
 {
