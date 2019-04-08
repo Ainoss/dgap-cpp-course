@@ -6,16 +6,9 @@ template <typename T1>
 class BasicQueue
 {
 public:
-
-    // Add element to the end
     virtual void enqueue(T1 &) = 0;
-
-    // Return first element
     virtual T1 dequeue() = 0;
-
-    // Get total count of elements
     virtual size_t getLength() = 0;
-
 };
 
 
@@ -34,24 +27,20 @@ private:
 		node * prev;
 	};
 
-	node<T1> * head, *tail;
+	node<T1> * head, * tail;
 	size_t size;
 
 public:
 	ListQueue() : head(nullptr), tail(nullptr), size(0) {};
-	ListQueue(node<T1> * x) : head(x), tail(x), size(1) {};
-	ListQueue(ListQueue<T1> & l) : head(l.head), tail(l.tail), size(l.size) {};
+	ListQueue(const ListQueue<T1> & l) = default;
+	~ListQueue() {
+		while (size > 0)
+			dequeue();
+	}
 
 	virtual void enqueue(T1 & x);
 	virtual T1 dequeue();
 	virtual size_t getLength();
-
-    /*
-     * Fully implement class:
-     * - declarations here
-     * - definitions in queue.cpp
-     * Could have infinite size
-     */
 };
 
 template<typename T1>
@@ -96,7 +85,7 @@ template <typename T1>
 class ArrayQueue: public BasicQueue<T1>
 {
 public:
-	ArrayQueue(unsigned capacity = 1) : head(0), tail(0), size(0), _capacity(capacity)
+	ArrayQueue(unsigned capacity = 3) : head(0), tail(0), size(0), _capacity(capacity)
 	{
 		_array = new T1[capacity];
 	}
@@ -112,13 +101,6 @@ public:
 private:
 	T1 * _array;
 	size_t head, tail, size, _capacity;
-
-    /*
-     * Fully implement class:
-     * - declarations here
-     * - definitions in queue.cpp
-     * Only finite size implementation is required
-     */
 };
 
 
@@ -126,11 +108,10 @@ private:
 template<typename T1>
 inline void ArrayQueue<T1>::enqueue(T1 & x)
 {
-	_array[size] = x;
-	tail = size;
+	_array[tail] = x;
 	size = (size + 1) % _capacity;
-	if (size == head) throw logic_error("Queue overflow");
-
+	tail = size;
+	if (size == _capacity) throw logic_error("Queue overflow");
 }
 
 
@@ -139,7 +120,9 @@ inline T1 ArrayQueue<T1>::dequeue()
 {
 	if(size == 0) throw logic_error("Queue is empty");
 	size--;
-	return _array[head++];
+	size_t head_buf = head;
+	head = (head + 1) % _capacity;
+	return _array[head_buf];
 }
 
 
