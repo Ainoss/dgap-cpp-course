@@ -17,10 +17,12 @@ class ArrayQueue: public BasicQueue
 		int lon;
 	public:	
 	ArrayQueue(int n);
+	~ArrayQueue();
   	void  enqueue(data &c);
 	data  denqueue();	
 	unsigned getLength();	
 };
+
 class ListQueue: public BasicQueue
 {
 	private:
@@ -35,6 +37,7 @@ class ListQueue: public BasicQueue
 	public:
 	void  enqueue(data &c);
 	ListQueue();
+	~ListQueue();
 	data denqueue();
 	unsigned getLength();
 };
