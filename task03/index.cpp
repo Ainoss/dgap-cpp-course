@@ -3,9 +3,13 @@
 #include <string>
 #include <vector>
 
+#ifdef __linux__
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#elif defined(_WIN32)
+#include <Windows.h>
+#endif
 
 using namespace std;
 
