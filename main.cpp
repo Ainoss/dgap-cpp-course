@@ -1,37 +1,28 @@
 #include <iostream>
-#include "queue.h"
+#include <string>
+#include "storage.h"
+
 using namespace std;
 
- int main()
- {
-    char c;
-    std::cout << "Type of queue (a - array, l - list): ";
-    std::cin >> c;
-	BasicQueue *queue = NULL;
-    if (c == 'a')
-        queue = new ArrayQueue(20);
-    else if (c == 'l')
-    	queue = new ListQueue;
-    else {
-        std::cout << "Bad type, exit" << std::endl;
-        return 1;
-    }
+int main()
+{
+	int i = 33;
 
-	
-    for (c = 0;c < 10;c++)
-    {	
-	cin >> d;
-	queue->enqueue(d);
-	cout << queue->getLength() << endl;
-    }
-    for (c = 0;c < 10;c++)
-    {
-	cout << queue->denqueue()  << " ";
-	cout << queue->getLength() << endl;
-    }
-    delete queue;
-    return 0;
+	// With int it works very well, holding actual value:
+	Storage<int> st_int(i);
+	cout << "Stored int " << st_int.GetVal() << endl;
+	cout << "New val: ";
+	cin >> i;
+	st_int.SetVal(i);
+	cout << "Stored int " << st_int.GetVal() << endl;
+
+	// But with usual char* it doesn't work:
+	char str[] = "Hello";
+	Storage<char*> st_str(str);
+	cout << "Stored str " << st_str.GetVal() << endl;
+	str[1] = 'X';
+	// Value in storage broken:
+	cout << "Stored str " << st_str.GetVal() << endl;
+
+	return 0;
 }
-
-	
-
