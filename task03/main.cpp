@@ -19,7 +19,6 @@ vector<string> split(const string &s, char delim) {
 
 int main(int argc, char *argv[])
 {
-    cout << ctime(&lt) << endl;
 
     string root;
     if (argc == 1)

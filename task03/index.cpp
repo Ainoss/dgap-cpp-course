@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iomanip>
 
 
 #ifdef __linux__
@@ -79,7 +80,10 @@ vector<file_info*> read_directory(string path)
 
 inline void FileIndexer::print_one(const shared_ptr<file_info> el) {
     time_t lt = el->mtime;
-    cout << el->name << "\t\t" << el->size << "\t\t" << el->path << "\t\t" << (el->type == ft_dir ? "dir" : "reg") << "\t\t" << ctime(&lt); //кря я уточка
+    cout << setw(20) << left << (el->name.length() <= 20 ? el->name : "too long, krya") << \
+        setw(10) << el->size << setw(50) << \
+           (el->path.length() <= 50? el->path : "too long, krya") << setw(3) << \
+           (el->type == ft_dir ? "dir" : "reg") << setw(50) << right << ctime(&lt); //кря я уточка
 }
 
 
