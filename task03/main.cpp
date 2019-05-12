@@ -1,12 +1,12 @@
-
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <vector>
 
 #include "index.h"
+#include <time.h>
 
 using namespace std;
+
 
 vector<string> split(const string &s, char delim) {
     vector<string> elems;
@@ -19,6 +19,8 @@ vector<string> split(const string &s, char delim) {
 
 int main(int argc, char *argv[])
 {
+    cout << ctime(&lt) << endl;
+
     string root;
     if (argc == 1)
         root = ".";
