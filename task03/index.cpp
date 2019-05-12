@@ -1,42 +1,29 @@
 
+#include "index.h"
 #include <iostream>
-#include <string>
 #include <vector>
+#include <algorithm>
+
 
 #ifdef __linux__
+
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+
 #elif defined(_WIN32)
 #include <Windows.h>
 #endif
 
 using namespace std;
-
-enum file_type
-{
-    ft_dir,
-    ft_reg,
-};
-
-struct file_info 
-{
-    string name;
-    string path;
-    file_type type;
-    uint64_t size;
-    uint64_t mtime;
-};
-
 #ifdef __linux__
 
-vector<file_info*> read_directory(string path)
-{
+vector<file_info *> read_directory(const string &path) {
     DIR *dirp = opendir(path.c_str());
     if (!dirp)
-        return vector<file_info*>();
+        return vector<file_info *>();
 
-    vector<file_info*> vec;
+    vector<file_info *> vec;
     dirent *entry;
     while (entry = readdir(dirp)) {
         string name = entry->d_name;
@@ -48,12 +35,14 @@ vector<file_info*> read_directory(string path)
             continue; // err
 
         file_info *inf = new file_info;
+        inf->path = fullpath;
         inf->name = name;
         inf->type = entry->d_type == DT_DIR ? ft_dir : ft_reg;
         inf->size = st.st_size;
         inf->mtime = st.st_mtim.tv_sec;
         vec.push_back(inf);
     }
+    closedir(dirp);
     return vec;
 }
 
@@ -61,30 +50,102 @@ vector<file_info*> read_directory(string path)
 
 vector<file_info*> read_directory(string path)
 {
-	path += "/*";
-	WIN32_FIND_DATA fd;
-	HANDLE hFind = FindFirstFile(path.c_str(), &fd);
-	if (hFind == INVALID_HANDLE_VALUE)
-		return vector<file_info*>();
-    
-	vector<file_info*> vec;
-	do {
-		file_info *info = new file_info;
-		string name = fd.cFileName;
+    path += "/*";
+    WIN32_FIND_DATA fd;
+    HANDLE hFind = FindFirstFile(path.c_str(), &fd);
+    if (hFind == INVALID_HANDLE_VALUE)
+        return vector<file_info*>();
+
+    vector<file_info*> vec;
+    do {
+        file_info *info = new file_info;
+        string name = fd.cFileName;
         if (name == "." || name == "..")
             continue;
 
         info->name = name;
-		info->mtime = fd.ftLastWriteTime.dwLowDateTime;
-		info->size = fd.nFileSizeLow | fd.nFileSizeHigh << 32;
-		info->type = (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? ft_dir : ft_reg;
-		vec.push_back(info);
-	} while (FindNextFile(hFind, &fd));
+        info->mtime = fd.ftLastWriteTime.dwLowDateTime;
+        info->size = fd.nFileSizeLow | fd.nFileSizeHigh << 32;
+        info->type = (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? ft_dir : ft_reg;
+        vec.push_back(info);
+    } while (FindNextFile(hFind, &fd));
 
-	FindClose(hFind);
-	return vec;
+    FindClose(hFind);
+    return vec;
 }
 
 
 #endif
 
+inline void FileIndexer::print_one(const shared_ptr<file_info> el) {
+    time_t lt = el->mtime;
+    cout << el->name << "\t\t" << el->size << "\t\t" << el->path << "\t\t" << (el->type == ft_dir ? "dir" : "reg") << "\t\t" << ctime(&lt); //кря я уточка
+}
+
+
+unsigned FileIndexer::Build(const string &Path) {
+    unsigned num = 0;
+    auto current_dir = read_directory(Path);
+    for (auto &d: current_dir) {
+        auto new_one = make_shared<file_info>(*d);
+        Index.insert(make_pair(Path + "/" + d->name, new_one));
+        num++;
+        if (d->type == ft_dir)
+            Build(Path + "/" + d->name);
+        delete d;
+    }
+    return num;
+}
+
+unsigned FileIndexer::Build() { return number = Build(root); }
+
+FileIndexer::~FileIndexer() { Index.clear(); }
+
+bool FileIndexer::MoveFile(const std::string &path, const std::string &new_path) {
+    if (Index.find(path) == Index.end())
+        return false;
+    else
+        Index[new_path] = Index[path];
+    Index.erase(path);
+    return true;
+}
+
+bool FileIndexer::DeleteFile(const std::string &path) {
+    if (number == 0 || Index.find(path) == Index.end())
+        return false;
+    else
+        Index.erase(path);
+    return true;
+}
+
+unsigned FileIndexer::FindFiles(const std::string &pattern) {
+    unsigned num = 0;
+    for (auto &it: Index)
+        if (it.first.find(pattern) <= it.first.length()) {
+            num++;
+            print_one(it.second);
+        }
+    cout << "matches found: " << num << endl;
+    return num;
+}
+
+void FileIndexer::PrintFiles() {
+    for (auto &it: Index)
+        print_one(it.second);
+}
+
+void FileIndexer::PrintFilesSorted(FileIndexer::SortingType type) {
+    if (type == Name)
+        PrintFiles();
+    else {
+        vector<PAIR> sorting_map;
+        for (auto &it: Index)
+            sorting_map.push_back(it);
+        if (type == Size)
+            sort(sorting_map.begin(), sorting_map.end(), cmp_Size);
+        else
+            sort(sorting_map.begin(), sorting_map.end(), cmp_Time);
+        for (auto &it: sorting_map)
+            print_one(it.second);
+    }
+}

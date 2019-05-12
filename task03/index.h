@@ -1,10 +1,35 @@
-
+#pragma once
 #include <string>
+#include <map>
+#include <memory>
+#include <dirent.h>
+#include <sstream>
+using namespace std;
+enum file_type
+{
+    ft_dir,
+    ft_reg,
+};
+struct file_info
+{
+    string name;
+    string path;
+    file_type type;
+    uint64_t size;
+    uint64_t mtime;
+};
+typedef pair <string, shared_ptr<file_info>> PAIR;
+
+
+
 
 class FileIndexer
 {
 public:
-    FileIndexer(const std::string &rootPath);
+    explicit FileIndexer(const string &rootPath):
+    root (rootPath),
+    number (0)
+    {};
     ~FileIndexer();
 
     /*
@@ -14,12 +39,21 @@ public:
      * Return number of files found.
      */
     unsigned Build();
+    unsigned Build(const string &Path);
 
     enum SortingType {
         Name,
         Size,
         Time,
     };
+
+    static bool cmp_Size (const PAIR &T1, const PAIR &T2){
+        return T1.second->size < T2.second->size;
+    }
+    static bool cmp_Time (const PAIR &T1, const PAIR &T2){
+        return T1.second->mtime < T2.second->mtime;
+
+    }
 
     /*
      * Print file list to cout unsorted/sorted.
@@ -46,7 +80,12 @@ public:
      */
     bool DeleteFile(const std::string &path);
 
+    void print_one (shared_ptr<file_info> el);
+
+
 private:
-    /* ... */
+    map<string, shared_ptr<file_info> > Index;
+    const string root;
+    unsigned number;
 };
 
