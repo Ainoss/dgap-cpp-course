@@ -1,11 +1,11 @@
-
 #include "index.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <iomanip>
 
-
+#define LENGHT_OF_NAME 20
+#define LENGHT_OF_PATH 50
 #ifdef __linux__
 
 #include <dirent.h>
@@ -80,10 +80,12 @@ vector<file_info*> read_directory(string path)
 
 inline void FileIndexer::print_one(const shared_ptr<file_info> el) {
     time_t lt = el->mtime;
-    cout << setw(20) << left << (el->name.length() <= 20 ? el->name : "too long, krya") << \
-        setw(10) << el->size << setw(50) << \
-           (el->path.length() <= 50? el->path : "too long, krya") << setw(3) << \
-           (el->type == ft_dir ? "dir" : "reg") << setw(50) << right << ctime(&lt); //кря я уточка
+    cout << setw(LENGHT_OF_NAME) << left << \
+        (el->name.length() < LENGHT_OF_NAME? el->name : (el->name.substr(0, LENGHT_OF_NAME - 3) + "...")) << \
+            setw(10) << el->size << setw(LENGHT_OF_PATH) << \
+                (el->path.length() < LENGHT_OF_PATH? el->path : (el->path.substr(0, LENGHT_OF_PATH - 3) + "...")) << \
+                    setw(5) << right << (el->type == ft_dir ? "dir" : "reg") << \
+                        setw(30) << ctime(&lt);
 }
 
 
