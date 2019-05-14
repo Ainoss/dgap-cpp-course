@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     // Build deep file index
     FileIndexer index(root);
     index.Build();
-
+    
     while (1) {
         cout << "> ";
         string line;
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         }
         else if (cmd[0] == "move" && cmd.size() == 3) {
             if (!index.MoveFile(cmd[1], cmd[2]))
-                cout << "File not found" << endl;
+                cout << "Move failed" << endl;
         }
         else if (cmd[0] == "del" && cmd.size() == 2) {
             if (!index.DeleteFile(cmd[1]))
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         }
         else if (cmd[0] == "exit")
             break;
-        else
+	else
             cout << "Incorrect command!" << endl;
     }
 

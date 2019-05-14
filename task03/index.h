@@ -1,5 +1,10 @@
+#pragma once
 
 #include <string>
+#include <map>
+#include <memory>
+
+struct file_info;
 
 class FileIndexer
 {
@@ -47,6 +52,7 @@ public:
     bool DeleteFile(const std::string &path);
 
 private:
-    /* ... */
+    std::string m_root;
+    std::map<std::string, std::shared_ptr<file_info>> mp;
 };
 
