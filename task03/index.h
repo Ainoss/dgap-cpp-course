@@ -1,52 +1,59 @@
+#pragma once
 
+#include <map>
+#include <vector>
+#include <Windows.h>
+#include <fileapi.h>
+#include <sys/stat.h>
+#include <memory>
 #include <string>
+
+using namespace std;
+
+enum file_type
+{
+	ft_dir,
+	ft_reg,
+};
+
+struct file_info
+{
+	string name;
+	string path;
+	file_type type;
+	uint64_t size;
+	uint64_t mtime;
+};
+
+vector<file_info*> read_directory(string path);
 
 class FileIndexer
 {
 public:
-    FileIndexer(const std::string &rootPath);
-    ~FileIndexer();
+	FileIndexer(const std::string& rootPath);
+	~FileIndexer() { _base.clear(); }
 
-    /*
-     * Build deep file index starting from root dir.
-     * Put info about files into map: "Full path" -> file_info.
-     * Store file_info as shared_ptr. Do not use pure pointers inside this class.
-     * Return number of files found.
-     */
-    unsigned Build();
+	unsigned Build();
 
-    enum SortingType {
-        Name,
-        Size,
-        Time,
-    };
+	enum SortingType {
+		Name,
+		Size,
+		Time,
+	};
 
-    /*
-     * Print file list to cout unsorted/sorted.
-     * Use table-view to print all info about files.
-     */
-    void PrintFiles();
-    void PrintFilesSorted(SortingType type);
+	void PrintFiles();
+	void PrintFilesSorted(SortingType type);
 
-    /*
-     * Find file paths by pattern and print them unsorted.
-     * Return number of found files.
-     */
-    unsigned FindFiles(const std::string &pattern);
+	unsigned FindFiles(const std::string& pattern);
 
-    /* 
-     * Move file selected by path.
-     * Return status: success or fail.
-     */
-    bool MoveFile(const std::string &path, const std::string &new_path);
+	bool MoveFile_(const std::string& path, const std::string& new_path);
 
-    /* 
-     * Delete file selected by path.
-     * Return status: success or fail.
-     */
-    bool DeleteFile(const std::string &path);
+	bool DeleteFile_(const std::string& path);
 
+	void BuildIn(const string& root, int& count);
 private:
-    /* ... */
+	map<string, shared_ptr<file_info>> _base;
+	string _root;
+	int _size_name, _size_path;
 };
 
