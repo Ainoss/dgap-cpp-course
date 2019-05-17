@@ -2,8 +2,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <algorithm>
+#include <time.h>
 #include "index.h"
+
+#pragma warning (disable : 4996)
 
 using namespace std;
 
@@ -91,8 +94,12 @@ inline unsigned FileIndexer::Build()
 
 inline void FileIndexer::PrintFiles()
 {
-	for (auto i : _base) {
-		cout << i.second->name << endl;
+	for (auto& i : _base) {
+		__time64_t r = i.second->mtime;
+		struct tm* t;
+		t = gmtime(&r);
+		printf("%-50s %-50I64u", i.second->name.c_str(), i.second->size);
+		printf("%04i/%02i/%02i %02i:%02i:%02i \n", (t->tm_year), t->tm_mon, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
 	}
 }
 
@@ -130,5 +137,26 @@ inline unsigned FileIndexer::FindFiles(const std::string & pattern)
 inline void FileIndexer::PrintFilesSorted(SortingType type)
 {
 	cout << "dsn" << endl;
-	//vector <string, shared_ptr<file_info>> buf;
+	vector <shared_ptr<file_info>> buf;
+	for (auto i : _base) {
+		buf.push_back(i.second);
+	}
+	if (type == Name){
+		sort(buf.begin(), buf.end(), [](const auto i, const auto j) {
+			return (i->name > j->name) ? true : false;
+			});
+	}
+	else if (type == Size) {
+		sort(buf.begin(), buf.end(), [](const auto i, const auto j) {
+			return (i->size > j->size) ? true : false;
+			});
+	}
+	else if (type == Time) {
+		sort(buf.begin(), buf.end(), [](const auto i, const auto j) {
+			return (i->mtime > j->mtime) ? true : false;
+			});
+	}
+	for (auto& i : buf) {
+		printf("%-50s %-50I64u %I64u\n", i->name.c_str(), i->size, i->mtime);
+	}
 }
