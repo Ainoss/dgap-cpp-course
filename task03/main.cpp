@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -17,8 +16,7 @@ vector<string> split(const string &s, char delim) {
     return elems;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     string root;
     if (argc == 1)
         root = ".";
@@ -27,9 +25,9 @@ int main(int argc, char *argv[])
 
     // Build deep file index
     FileIndexer index(root);
-    index.Build();
+    cout << index.Build() << endl;
 
-    while (1) {
+    while (true) {
         cout << "> ";
         string line;
         if (!getline(cin, line))
@@ -49,7 +47,7 @@ int main(int argc, char *argv[])
                 index.PrintFilesSorted(FileIndexer::SortingType::Time);
         }
         else if (cmd[0] == "find" && cmd.size() == 2) {
-            index.FindFiles(cmd[1]);
+            cout << index.FindFiles(cmd[1]) << endl;
         }
         else if (cmd[0] == "move" && cmd.size() == 3) {
             if (!index.MoveFile(cmd[1], cmd[2]))
@@ -57,7 +55,7 @@ int main(int argc, char *argv[])
         }
         else if (cmd[0] == "del" && cmd.size() == 2) {
             if (!index.DeleteFile(cmd[1]))
-                cout << "File not found" << endl;
+                cout << "File not found or the new path is incorrect" << endl;
         }
         else if (cmd[0] == "exit")
             break;
@@ -67,4 +65,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-

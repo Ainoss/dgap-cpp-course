@@ -1,18 +1,35 @@
-
 #include <string>
+#include <map>
+#include <memory>
+#include <utility>
+#include <map>
 
-class FileIndexer
-{
+enum file_type {
+    ft_dir,
+    ft_reg,
+};
+
+struct file_info {
+    std::string name;
+    std::string path;
+    file_type type;
+    uint64_t size;
+    uint64_t mtime;
+};
+
+#define MAX_NAME_LENGTH 100
+#define MAX_PATH_LENGTH 150
+#define TYPE_LENGTH 9
+#define SIZE_LENGTH 7
+//#define TIME_LENGTH 25
+
+static std::map<int, char> SIPrefix = {{0, ' '}, {1, 'K'}, {2, 'M'}, {3, 'G'}, {4, 'T'}, {5, 'P'}, {6, 'E'}};
+
+class FileIndexer {
 public:
     FileIndexer(const std::string &rootPath);
-    ~FileIndexer();
+    ~FileIndexer() = default;
 
-    /*
-     * Build deep file index starting from root dir.
-     * Put info about files into map: "Full path" -> file_info.
-     * Store file_info as shared_ptr. Do not use pure pointers inside this class.
-     * Return number of files found.
-     */
     unsigned Build();
 
     enum SortingType {
@@ -21,32 +38,20 @@ public:
         Time,
     };
 
-    /*
-     * Print file list to cout unsorted/sorted.
-     * Use table-view to print all info about files.
-     */
-    void PrintFiles();
-    void PrintFilesSorted(SortingType type);
-
-    /*
-     * Find file paths by pattern and print them unsorted.
-     * Return number of found files.
-     */
-    unsigned FindFiles(const std::string &pattern);
-
-    /* 
-     * Move file selected by path.
-     * Return status: success or fail.
-     */
+    void PrintFiles() const;
+    void PrintFilesSorted(SortingType type) const;
+    unsigned FindFiles(const std::string &pattern) const;
     bool MoveFile(const std::string &path, const std::string &new_path);
-
-    /* 
-     * Delete file selected by path.
-     * Return status: success or fail.
-     */
     bool DeleteFile(const std::string &path);
 
 private:
-    /* ... */
-};
+    const std::string root_path_;
+    std::map<std::string, std::shared_ptr<file_info>> indices_;
+    unsigned long name_length_ = 0;
+    unsigned long path_length_ = 0;
 
+    unsigned BuildIndex(const std::string& dir);
+    void UpdateNameLength ();
+    void UpdatePathLength ();
+    void PrintElement (const std::shared_ptr<file_info> file) const;
+};
