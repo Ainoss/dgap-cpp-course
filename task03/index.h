@@ -17,8 +17,8 @@ struct file_info {
     uint64_t mtime;
 };
 
-#define MAX_NAME_LENGTH 100
-#define MAX_PATH_LENGTH 150
+#define MAX_NAME_LENGTH 70
+#define MAX_PATH_LENGTH 120
 #define TYPE_LENGTH 9
 #define SIZE_LENGTH 7
 //#define TIME_LENGTH 25
