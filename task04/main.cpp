@@ -1,12 +1,11 @@
+#include "storage.h"
 
 #include <iostream>
 #include <string>
-#include "storage.h"
 
 using namespace std;
 
-int main()
-{
+int main() {
     int i = 33;
 
     // With int it works very well, holding actual value:
@@ -17,14 +16,19 @@ int main()
     st_int.SetVal(i);
     cout << "Stored int " << st_int.GetVal() << endl;
 
-    // But with usual char* it doesn't work:
+    // It works with usual char* as well:
     char str[100] = "Hello";
     Storage<char*> st_str(str);
-    cout << "Stored str " << st_int.GetVal() << endl;
+    
+    char* output = st_str.GetVal();
+    cout << "Stored str " << output << endl;
+    delete[] output; // imporant!
+
     str[1] = 'X';
-    // Value in storage broken:
-    cout << "Stored str " << st_int.GetVal() << endl;
+    // Value in storage is still OK:
+    output = st_str.GetVal();
+    cout << "Stored str " << output << endl;
+    delete[] output; // imporant!
 
     return 0;
 }
-
