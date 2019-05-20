@@ -8,7 +8,8 @@
 
 using namespace std;
 
-vector<string> split(const string &s, char delim) {
+vector<string> split(const string &s, char delim)
+{
     vector<string> elems;
     stringstream ss(s);
     string item;
@@ -47,19 +48,15 @@ int main(int argc, char *argv[])
                 index.PrintFilesSorted(FileIndexer::SortingType::Size);
             else if (cmd[1] == "time")
                 index.PrintFilesSorted(FileIndexer::SortingType::Time);
-        }
-        else if (cmd[0] == "find" && cmd.size() == 2) {
+        } else if (cmd[0] == "find" && cmd.size() == 2) {
             index.FindFiles(cmd[1]);
-        }
-        else if (cmd[0] == "move" && cmd.size() == 3) {
-            if (!index.MoveFile(cmd[1], cmd[2]))
+        } else if (cmd[0] == "move" && cmd.size() == 3) {
+            if (!index.MoveFileFi(cmd[1], cmd[2]))
                 cout << "File not found" << endl;
-        }
-        else if (cmd[0] == "del" && cmd.size() == 2) {
-            if (!index.DeleteFile(cmd[1]))
+        } else if (cmd[0] == "del" && cmd.size() == 2) {
+            if (!index.DeleteFileFi(cmd[1]))
                 cout << "File not found" << endl;
-        }
-        else if (cmd[0] == "exit")
+        } else if (cmd[0] == "exit")
             break;
         else
             cout << "Incorrect command!" << endl;
@@ -67,4 +64,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
