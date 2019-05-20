@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 int main()
 {
     int i = 33;
@@ -20,11 +21,15 @@ int main()
     // But with usual char* it doesn't work:
     char str[100] = "Hello";
     Storage<char*> st_str(str);
-    cout << "Stored str " << st_int.GetVal() << endl;
+    cout << "Stored str " << st_str.GetVal() << endl;
     str[1] = 'X';
+
     // Value in storage broken:
-    cout << "Stored str " << st_int.GetVal() << endl;
+    cout << "Stored str " << st_str.GetVal() << endl;
+
+    st_str.SetVal("Bye, have a great time");
+    cout << "Stored str " << st_str.GetVal() << endl;
+
 
     return 0;
 }
-
